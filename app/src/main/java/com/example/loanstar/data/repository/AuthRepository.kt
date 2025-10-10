@@ -8,6 +8,9 @@ import com.example.loanstar.data.model.ApprovalStatus
 import com.example.loanstar.data.model.User
 import com.example.loanstar.data.model.UserRole
 import com.example.loanstar.data.remote.SupabaseClientProvider
+import com.example.loanstar.data.remote.dto.UserDto
+import com.example.loanstar.data.remote.dto.toDomain
+import com.example.loanstar.data.remote.dto.toDto
 import com.example.loanstar.util.Result
 import com.example.loanstar.util.safeCall
 import io.github.jan.supabase.gotrue.providers.builtin.Email
@@ -93,8 +96,8 @@ class AuthRepository @Inject constructor(
             updatedAt = System.currentTimeMillis()
         )
 
-        // Insert into Supabase
-        supabaseClient.postgrest.from("users").insert(user)
+        // Insert into Supabase using DTO
+        supabaseClient.postgrest.from("users").insert(user.toDto())
 
         // Cache locally
         userDao.insertUser(user.toEntity())
@@ -117,16 +120,16 @@ class AuthRepository @Inject constructor(
             ?: throw Exception("Failed to get user ID after login")
 
         // Fetch user profile from Supabase
-        val userEntity = supabaseClient.postgrest
+        val userDto = supabaseClient.postgrest
             .from("users")
             .select {
                 filter {
                     eq("id", userId)
                 }
             }
-            .decodeSingle<UserEntity>()
+            .decodeSingle<UserDto>()
 
-        val user = userEntity.toDomain()
+        val user = userDto.toDomain()
 
         // Check approval status
         when (user.approvalStatus) {
@@ -144,7 +147,7 @@ class AuthRepository @Inject constructor(
             ApprovalStatus.APPROVED -> {
                 // User is approved, allow login
                 // Cache locally
-                userDao.insertUser(userEntity)
+                userDao.insertUser(user.toEntity())
 
                 // Log transaction
                 logTransaction("USER_LOGIN", userId, "User logged in successfully")
@@ -183,10 +186,10 @@ class AuthRepository @Inject constructor(
      * Update user profile
      */
     suspend fun updateProfile(user: User): Result<User> = safeCall {
-        // Update in Supabase
+        // Update in Supabase using DTO
         supabaseClient.postgrest
             .from("users")
-            .update(user.toEntity()) {
+            .update(user.toDto()) {
                 filter {
                     eq("id", user.id)
                 }
@@ -209,38 +212,144 @@ class AuthRepository @Inject constructor(
         }
 
         // Fetch from Supabase
-        val userEntity = supabaseClient.postgrest
+        val userDto = supabaseClient.postgrest
             .from("users")
             .select {
                 filter {
                     eq("id", userId)
                 }
             }
-            .decodeSingle<UserEntity>()
+            .decodeSingle<UserDto>()
+
+        val user = userDto.toDomain()
 
         // Cache locally
-        userDao.insertUser(userEntity)
+        userDao.insertUser(user.toEntity())
 
-        userEntity.toDomain()
+        user
     }
 
     /**
      * Get users by role (for admin)
      */
     suspend fun getUsersByRole(role: UserRole): Result<List<User>> = safeCall {
-        val users = supabaseClient.postgrest
+        val userDtos = supabaseClient.postgrest
             .from("users")
             .select {
                 filter {
-                    eq("role", role.name)
+                    eq("role", role.name.lowercase())
                 }
             }
-            .decodeList<UserEntity>()
+            .decodeList<UserDto>()
+
+        val users = userDtos.map { it.toDomain() }
 
         // Cache locally
-        userDao.insertUsers(users)
+        userDao.insertUsers(users.map { it.toEntity() })
 
-        users.map { it.toDomain() }
+        users
+    }
+
+    /**
+     * Get users by role and approval status (for admin)
+     */
+    suspend fun getUsersByRoleAndStatus(
+        role: UserRole,
+        approvalStatus: ApprovalStatus
+    ): Result<List<User>> = safeCall {
+        val userDtos = supabaseClient.postgrest
+            .from("users")
+            .select {
+                filter {
+                    eq("role", role.name.lowercase())
+                    eq("approval_status", approvalStatus.name)
+                }
+            }
+            .decodeList<UserDto>()
+
+        val users = userDtos.map { it.toDomain() }
+
+        // Cache locally
+        userDao.insertUsers(users.map { it.toEntity() })
+
+        users
+    }
+
+    /**
+     * Get pending agents (for admin approval dashboard)
+     */
+    suspend fun getPendingAgents(): Result<List<User>> {
+        return getUsersByRoleAndStatus(UserRole.AGENT, ApprovalStatus.PENDING)
+    }
+
+    /**
+     * Approve an agent
+     */
+    suspend fun approveAgent(agentId: String, adminId: String): Result<User> = safeCall {
+        val updatedUser = getUserById(agentId).let { result ->
+            when (result) {
+                is Result.Success -> result.data.copy(
+                    approvalStatus = ApprovalStatus.APPROVED,
+                    approvedByAdminId = adminId,
+                    approvalDate = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis()
+                )
+                is Result.Error -> throw result.exception
+                is Result.Loading -> throw Exception("User data is still loading")
+            }
+        }
+
+        // Update in Supabase
+        supabaseClient.postgrest
+            .from("users")
+            .update(updatedUser.toDto()) {
+                filter {
+                    eq("id", agentId)
+                }
+            }
+
+        // Update local cache
+        userDao.updateUser(updatedUser.toEntity())
+
+        // Log transaction
+        logTransaction("APPROVE_AGENT", adminId, "Approved agent: ${updatedUser.username}")
+
+        updatedUser
+    }
+
+    /**
+     * Reject an agent
+     */
+    suspend fun rejectAgent(agentId: String, adminId: String, reason: String): Result<User> = safeCall {
+        val updatedUser = getUserById(agentId).let { result ->
+            when (result) {
+                is Result.Success -> result.data.copy(
+                    approvalStatus = ApprovalStatus.REJECTED,
+                    approvedByAdminId = adminId,
+                    rejectionReason = reason,
+                    updatedAt = System.currentTimeMillis()
+                )
+                is Result.Error -> throw result.exception
+                is Result.Loading -> throw Exception("User data is still loading")
+            }
+        }
+
+        // Update in Supabase
+        supabaseClient.postgrest
+            .from("users")
+            .update(updatedUser.toDto()) {
+                filter {
+                    eq("id", agentId)
+                }
+            }
+
+        // Update local cache
+        userDao.updateUser(updatedUser.toEntity())
+
+        // Log transaction
+        logTransaction("REJECT_AGENT", adminId, "Rejected agent: ${updatedUser.username}. Reason: $reason")
+
+        updatedUser
     }
 
     /**

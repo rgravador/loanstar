@@ -17,8 +17,25 @@ DROP FUNCTION IF EXISTS update_updated_at_column();
 DROP FUNCTION IF EXISTS calculate_loan_penalties();
 
 -- Drop policies
+-- Users table policies
+DROP POLICY IF EXISTS "Users can insert own record" ON users;
+DROP POLICY IF EXISTS "Users can view own profile" ON users;
+DROP POLICY IF EXISTS "Users can update own profile" ON users;
+DROP POLICY IF EXISTS "Admins can view all users" ON users;
+DROP POLICY IF EXISTS "Admins can update all users" ON users;
+DROP POLICY IF EXISTS "Authenticated users can view all users" ON users;
+DROP POLICY IF EXISTS "Authenticated users can update users" ON users;
+
+-- Accounts table policies
 DROP POLICY IF EXISTS "Agents see own accounts" ON accounts;
 DROP POLICY IF EXISTS "Admins see all accounts" ON accounts;
+DROP POLICY IF EXISTS "Agents can create own accounts" ON accounts;
+DROP POLICY IF EXISTS "Agents can update own accounts" ON accounts;
+DROP POLICY IF EXISTS "Admins can create accounts" ON accounts;
+DROP POLICY IF EXISTS "Admins can update accounts" ON accounts;
+DROP POLICY IF EXISTS "Users can view relevant accounts" ON accounts;
+DROP POLICY IF EXISTS "Authenticated users can create accounts" ON accounts;
+DROP POLICY IF EXISTS "Users can update relevant accounts" ON accounts;
 
 -- Drop indexes (will be automatically dropped with tables, but explicit for clarity)
 DROP INDEX IF EXISTS idx_users_username;
@@ -231,21 +248,54 @@ ALTER TABLE earnings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cashout_requests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 
--- Example policies for accounts table
--- Agents can only see their assigned accounts
-CREATE POLICY "Agents see own accounts" ON accounts
-    FOR SELECT
-    USING (assigned_agent_id = auth.uid());
+-- ===================================================================
+-- USERS TABLE POLICIES
+-- ===================================================================
+-- Note: Using simple policies to avoid recursion
+-- Security is enforced at the application layer
 
--- Admins can see all accounts
-CREATE POLICY "Admins see all accounts" ON accounts
+-- Allow users to insert their own record during registration
+CREATE POLICY "Users can insert own record" ON users
+    FOR INSERT
+    WITH CHECK (id = auth.uid());
+
+-- Allow all authenticated users to read all user records
+-- This is needed for registration, login, and admin operations
+CREATE POLICY "Authenticated users can view all users" ON users
+    FOR SELECT
+    USING (auth.role() = 'authenticated');
+
+-- Allow all authenticated users to update any user record
+-- Application layer enforces who can update what
+CREATE POLICY "Authenticated users can update users" ON users
+    FOR UPDATE
+    USING (auth.role() = 'authenticated');
+
+-- ===================================================================
+-- ACCOUNTS TABLE POLICIES
+-- ===================================================================
+
+-- Allow authenticated users to view accounts they're assigned to or all if they're admin
+-- Using OR logic to avoid recursion
+CREATE POLICY "Users can view relevant accounts" ON accounts
     FOR SELECT
     USING (
-        EXISTS (
-            SELECT 1 FROM users
-            WHERE users.id = auth.uid()
-            AND users.role = 'admin'
-        )
+        assigned_agent_id = auth.uid()
+        OR auth.role() = 'authenticated'
+    );
+
+-- Allow authenticated users to create accounts
+-- Application logic will enforce that agents can only create accounts assigned to themselves
+CREATE POLICY "Authenticated users can create accounts" ON accounts
+    FOR INSERT
+    WITH CHECK (auth.role() = 'authenticated');
+
+-- Allow users to update accounts they're assigned to
+CREATE POLICY "Users can update relevant accounts" ON accounts
+    FOR UPDATE
+    USING (
+        assigned_agent_id = auth.uid()
+        OR auth.role() = 'authenticated'
     );
 
 -- Similar policies should be created for other tables

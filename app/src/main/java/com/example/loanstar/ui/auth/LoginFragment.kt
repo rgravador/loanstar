@@ -36,8 +36,19 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupDevelopmentDefaults()
         setupObservers()
         setupClickListeners()
+    }
+
+    /**
+     * Set default login credentials when in development stage
+     */
+    private fun setupDevelopmentDefaults() {
+        if (com.example.loanstar.BuildConfig.STAGE == "development") {
+            binding.etEmail.setText("redgiegravador@gmail.com")
+            binding.etPassword.setText("Just1234!")
+        }
     }
 
     private fun setupObservers() {
@@ -50,9 +61,9 @@ class LoginFragment : Fragment() {
                 is AuthState.Authenticated -> {
                     binding.progressBar.visibility = View.GONE
 
-                    // Navigate to home screen after successful login
+                    // Navigate to dashboard screen after successful login
                     Toast.makeText(context, "Login successful as ${state.user.role}", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_navigation_home)
+                    findNavController().navigate(R.id.action_loginFragment_to_navigation_dashboard)
                 }
                 is AuthState.Error -> {
                     binding.progressBar.visibility = View.GONE

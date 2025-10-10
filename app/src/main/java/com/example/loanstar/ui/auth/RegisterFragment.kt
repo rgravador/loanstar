@@ -63,7 +63,7 @@ class RegisterFragment : Fragment() {
                         }
                         com.example.loanstar.data.model.ApprovalStatus.APPROVED -> {
                             Toast.makeText(context, "Registration successful as ${state.user.role}", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_registerFragment_to_navigation_home)
+                            findNavController().navigate(R.id.action_registerFragment_to_navigation_dashboard)
                         }
                         else -> {
                             // This shouldn't happen during registration

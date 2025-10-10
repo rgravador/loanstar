@@ -15,8 +15,8 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_navigation_home"
-            app:destination="@id/navigation_home"
+            android:id="@+id/action_loginFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -27,28 +27,28 @@
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
-            android:id="@+id/action_registerFragment_to_navigation_home"
-            app:destination="@id/navigation_home"
+            android:id="@+id/action_registerFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Main App Fragments -->
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_dashboard"
         android:name="com.example.loanstar.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.loanstar.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_loans"
+        android:name="com.example.loanstar.ui.loans.LoansFragment"
+        android:label="@string/title_loans"
+        tools:layout="@layout/fragment_loans" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.loanstar.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_profile"
+        android:name="com.example.loanstar.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

@@ -29,6 +29,7 @@ android {
 
         buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("supabase.url", "")}\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${properties.getProperty("supabase.anon.key", "")}\"")
+        buildConfigField("String", "STAGE", "\"${properties.getProperty("stage", "production")}\"")
     }
 
     buildTypes {
