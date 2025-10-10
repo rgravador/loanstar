@@ -33,10 +33,10 @@
                 android:id="@+id/tv_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#4DFFFFFF"
+                android:background="@color/gold_500"
                 android:gravity="center"
                 android:text="A"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/navy_900"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50"
+                    android:textColor="@color/gold_500"
                     tools:text="₱12,500" />
             </LinearLayout>
         </LinearLayout>

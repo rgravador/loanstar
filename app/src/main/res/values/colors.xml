@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Glassmorphism Theme Colors -->
-    <color name="purple_200">#9C27B0</color>
-    <color name="purple_500">#7B2CBF</color>
-    <color name="purple_700">#6A11CB</color>
-    <color name="purple_800">#5A0FA0</color>
-    <color name="blue_accent">#2575FC</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- Deep Navy & Gold Theme Colors -->
+    <!-- Deep Navy Primary Shades -->
+    <color name="navy_200">#4D6B99</color>
+    <color name="navy_500">#003366</color>
+    <color name="navy_700">#002147</color>
+    <color name="navy_800">#001933</color>
+    <color name="navy_900">#001F3F</color>
+
+    <!-- Gold Accent Shades -->
+    <color name="gold_200">#FFE57F</color>
+    <color name="gold_500">#FFD700</color>
+    <color name="gold_700">#FFC107</color>
+    <color name="gold_800">#B8860B</color>
+
+    <!-- Base Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Glass Colors -->
-    <color name="glass_white">#33FFFFFF</color>
-    <color name="glass_border">#4DFFFFFF</color>
+    <!-- Glass Colors - Navy & Gold Theme -->
+    <color name="glass_navy">#33003366</color>
+    <color name="glass_gold">#33FFD700</color>
+    <color name="glass_border">#4DFFD700</color>
 
-    <!-- Status Colors - Glassmorphism Style -->
+    <!-- Status Colors - Navy & Gold Style -->
     <color name="status_approved_bg">#334CAF50</color>
     <color name="status_approved_text">#FFFFFF</color>
-    <color name="status_pending_bg">#33FF9800</color>
-    <color name="status_pending_text">#FFFFFF</color>
+    <color name="status_pending_bg">#33FFC107</color>
+    <color name="status_pending_text">#001F3F</color>
     <color name="status_rejected_bg">#33F44336</color>
     <color name="status_rejected_text">#FFFFFF</color>
 </resources>

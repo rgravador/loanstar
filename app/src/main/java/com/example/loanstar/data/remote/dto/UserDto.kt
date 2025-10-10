@@ -125,8 +125,8 @@ private fun parseProfileDetails(json: JsonObject): ProfileDetails? {
     return try {
         ProfileDetails(
             fullName = json["fullName"]?.toString()?.removeSurrounding("\"") ?: "",
-            phone = json["phone"]?.toString()?.removeSurrounding("\""),
-            avatarUrl = json["avatarUrl"]?.toString()?.removeSurrounding("\""),
+            phone = json["phone"]?.toString()?.removeSurrounding("\"") ?: "",
+            avatarUrl = json["avatarUrl"]?.toString()?.removeSurrounding("\"") ?: "",
             address = json["address"]?.toString()?.removeSurrounding("\"")
         )
     } catch (e: Exception) {

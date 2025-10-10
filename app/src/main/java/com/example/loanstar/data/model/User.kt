@@ -1,9 +1,9 @@
 package com.example.loanstar.data.model
 
-import kotlinx.serialization.Serializable
+import org.json.JSONObject
 
 /**
- * User roles in the system
+ * User role enum
  */
 enum class UserRole {
     ADMIN,
@@ -11,10 +11,7 @@ enum class UserRole {
 }
 
 /**
- * User approval status
- * PENDING - Agent registration awaiting admin approval
- * APPROVED - User approved and can login
- * REJECTED - User registration rejected
+ * Approval status enum for user accounts
  */
 enum class ApprovalStatus {
     PENDING,
@@ -23,9 +20,8 @@ enum class ApprovalStatus {
 }
 
 /**
- * User model representing a user in the system
+ * User data model representing the users table from Supabase
  */
-@Serializable
 data class User(
     val id: String,
     val username: String,
@@ -40,10 +36,35 @@ data class User(
     val updatedAt: Long = System.currentTimeMillis()
 )
 
-@Serializable
+/**
+ * Profile details stored in JSONB format in the database
+ */
 data class ProfileDetails(
-    val fullName: String,
+    val fullName: String? = null,
     val phone: String? = null,
     val avatarUrl: String? = null,
-    val address: String? = null
-)
+    val address: String? = null,
+    val dateOfBirth: String? = null
+) {
+    fun toJson(): JSONObject {
+        return JSONObject().apply {
+            fullName?.let { put("fullName", it) }
+            phone?.let { put("phone", it) }
+            address?.let { put("address", it) }
+            dateOfBirth?.let { put("dateOfBirth", it) }
+        }
+    }
+
+    companion object {
+        fun fromJson(json: JSONObject?): ProfileDetails? {
+            if (json == null) return null
+            return ProfileDetails(
+                fullName = json.optString("fullName", null),
+                phone = json.optString("phone", null),
+                avatarUrl = json.optString("avatarUrl", null),
+                address = json.optString("address", null),
+                dateOfBirth = json.optString("dateOfBirth", null)
+            )
+        }
+    }
+}
