@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="1dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@android:color/transparent"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -14,15 +15,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:padding="16dp"
+        android:background="@drawable/bg_agent_card_glass">
 
         <!-- Agent Avatar -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/avatar_container"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardCornerRadius="20dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="0dp"
+            app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -30,11 +33,11 @@
                 android:id="@+id/tv_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#E1BEE7"
+                android:background="#4DFFFFFF"
                 android:gravity="center"
                 android:text="A"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -45,9 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#212121"
+            android:textColor="#FFFFFF"
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="Jane Doe"
@@ -62,9 +65,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:textSize="13sp"
-            android:textColor="#757575"
+            android:textColor="#CCFFFFFF"
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="jane.doe@example.com"
@@ -116,15 +119,15 @@
                     android:layout_height="wrap_content"
                     android:text="Accounts"
                     android:textSize="11sp"
-                    android:textColor="#757575" />
+                    android:textColor="#99FFFFFF" />
 
                 <TextView
                     android:id="@+id/tv_accounts_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#212121"
+                    android:textColor="#FFFFFF"
                     tools:text="12" />
             </LinearLayout>
 
@@ -140,13 +143,13 @@
                     android:layout_height="wrap_content"
                     android:text="Earnings"
                     android:textSize="11sp"
-                    android:textColor="#757575" />
+                    android:textColor="#99FFFFFF" />
 
                 <TextView
                     android:id="@+id/tv_earnings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#4CAF50"
                     tools:text="₱12,500" />
