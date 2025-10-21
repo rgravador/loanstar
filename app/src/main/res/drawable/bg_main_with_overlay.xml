@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Background Image -->
-    <item>
-        <bitmap
-            android:src="@drawable/mainbg"
-            android:gravity="center"
-            android:scaleType="centerCrop" />
-    </item>
-
-    <!-- Navy Overlay for Glassmorphism Effect -->
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#80001F3F" />
-        </shape>
-    </item>
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Flat solid background - navy blue -->
+    <solid android:color="@color/navy_900" />
+</shape>

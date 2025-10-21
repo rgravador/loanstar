@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Glass navigation background with navy tint -->
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#E6001F3F" />
-        </shape>
-    </item>
-
-    <!-- Top Gold Border -->
-    <item android:top="0dp">
-        <shape android:shape="rectangle">
-            <solid android:color="#FFD700" />
-            <size android:height="2dp" />
-        </shape>
-    </item>
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Flat navigation background - solid navy blue -->
+    <solid android:color="@color/navy_800" />
+</shape>
