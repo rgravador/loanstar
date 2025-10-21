@@ -14,6 +14,7 @@ import com.example.loanstar.R
 import com.example.loanstar.data.model.ApprovalStatus
 import com.example.loanstar.databinding.DialogEditProfileBinding
 import com.example.loanstar.databinding.FragmentProfileBinding
+import com.google.android.material.tabs.TabLayout
 
 class ProfileFragment : Fragment() {
 
@@ -37,6 +38,7 @@ class ProfileFragment : Fragment() {
 
         setupObservers()
         setupClickListeners()
+        setupTabNavigation()
     }
 
     private fun setupObservers() {
@@ -89,12 +91,18 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        // Observe stats data
+        viewModel.stats.observe(viewLifecycleOwner) { stats ->
+            stats?.let {
+                binding.tvStatAccountsCount.text = it.totalAccounts.toString()
+                binding.tvStatLoansCount.text = it.activeLoans.toString()
+            }
+        }
+
         // Observe loading state
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.cardProfileHeader.visibility = if (isLoading) View.GONE else View.VISIBLE
-            binding.cardProfileDetails.visibility = if (isLoading) View.GONE else View.VISIBLE
-            binding.cardAccountStatus.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.appBarLayout.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
 
         // Observe error messages
@@ -107,8 +115,59 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupClickListeners() {
-        binding.fabEditProfile.setOnClickListener {
+        // Edit Profile button
+        binding.btnEditProfile.setOnClickListener {
             showEditProfileDialog()
+        }
+
+        // About button
+        binding.btnViewAbout.setOnClickListener {
+            // Switch to About tab
+            binding.tabLayout.getTabAt(0)?.select()
+        }
+
+        // Settings button
+        binding.btnSettings.setOnClickListener {
+            Toast.makeText(requireContext(), "Settings coming soon", Toast.LENGTH_SHORT).show()
+        }
+
+        // Edit cover photo
+        binding.fabEditCover.setOnClickListener {
+            Toast.makeText(requireContext(), "Change cover photo coming soon", Toast.LENGTH_SHORT).show()
+        }
+
+        // Edit profile picture
+        binding.ivEditProfilePicture.setOnClickListener {
+            Toast.makeText(requireContext(), "Change profile picture coming soon", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupTabNavigation() {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> showSection(Section.ABOUT)
+                    1 -> showSection(Section.DETAILS)
+                    2 -> showSection(Section.ACTIVITY)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+    private fun showSection(section: Section) {
+        // Hide all sections
+        binding.sectionAbout.visibility = View.GONE
+        binding.sectionDetails.visibility = View.GONE
+        binding.sectionActivity.visibility = View.GONE
+
+        // Show selected section
+        when (section) {
+            Section.ABOUT -> binding.sectionAbout.visibility = View.VISIBLE
+            Section.DETAILS -> binding.sectionDetails.visibility = View.VISIBLE
+            Section.ACTIVITY -> binding.sectionActivity.visibility = View.VISIBLE
         }
     }
 
@@ -157,5 +216,11 @@ class ProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    enum class Section {
+        ABOUT,
+        DETAILS,
+        ACTIVITY
     }
 }

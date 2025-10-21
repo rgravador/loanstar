@@ -8,13 +8,13 @@ import com.example.loanstar.data.model.AccountStatus
 import com.example.loanstar.data.model.ContactInfo
 import java.util.UUID
 
-class LoansViewModel : ViewModel() {
+/**
+ * ViewModel for Account Details
+ */
+class AccountDetailsViewModel : ViewModel() {
 
-    private val _accounts = MutableLiveData<List<Account>>()
-    val accounts: LiveData<List<Account>> = _accounts
-
-    private val _filteredAccounts = MutableLiveData<List<Account>>()
-    val filteredAccounts: LiveData<List<Account>> = _filteredAccounts
+    private val _account = MutableLiveData<Account?>()
+    val account: LiveData<Account?> = _account
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -22,23 +22,35 @@ class LoansViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-    private var allAccounts: List<Account> = emptyList()
-
-    init {
-        loadAccounts()
-    }
-
     /**
-     * Load accounts from database
+     * Load account by ID
      * TODO: Replace with actual Supabase API call when backend is implemented
      */
-    fun loadAccounts() {
+    fun loadAccount(accountId: String) {
         _isLoading.value = true
 
         // Mock data - replace with actual API call
-        val mockAccounts = listOf(
+        // In a real app, this would fetch from database/API
+        val mockAccounts = getMockAccounts()
+        val account = mockAccounts.find { it.id == accountId }
+
+        if (account != null) {
+            _account.value = account
+        } else {
+            _errorMessage.value = "Account not found"
+        }
+
+        _isLoading.value = false
+    }
+
+    /**
+     * Get mock accounts (same as in LoansViewModel)
+     * TODO: Replace with actual repository call
+     */
+    private fun getMockAccounts(): List<Account> {
+        return listOf(
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_1",
                 name = "John Smith",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 123-4567",
@@ -51,7 +63,7 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.ACTIVE
             ),
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_2",
                 name = "Sarah Johnson",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 234-5678",
@@ -63,7 +75,7 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.ACTIVE
             ),
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_3",
                 name = "Michael Davis",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 345-6789"
@@ -74,7 +86,7 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.ACTIVE
             ),
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_4",
                 name = "Emily Brown",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 456-7890",
@@ -87,7 +99,7 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.INACTIVE
             ),
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_5",
                 name = "David Wilson",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 567-8901",
@@ -99,7 +111,7 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.ACTIVE
             ),
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_6",
                 name = "Jessica Martinez",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 678-9012"
@@ -110,7 +122,7 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.ACTIVE
             ),
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_7",
                 name = "Robert Taylor",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 789-0123",
@@ -122,7 +134,7 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.SUSPENDED
             ),
             Account(
-                id = UUID.randomUUID().toString(),
+                id = "account_8",
                 name = "Lisa Anderson",
                 contactInfo = ContactInfo(
                     phone = "+1 (555) 890-1234",
@@ -135,31 +147,6 @@ class LoansViewModel : ViewModel() {
                 status = AccountStatus.ACTIVE
             )
         )
-
-        allAccounts = mockAccounts
-        _accounts.value = mockAccounts
-        _filteredAccounts.value = mockAccounts
-        _isLoading.value = false
-    }
-
-    /**
-     * Search accounts by name, phone, or address
-     */
-    fun searchAccounts(query: String) {
-        if (query.isBlank()) {
-            _filteredAccounts.value = allAccounts
-            return
-        }
-
-        val lowercaseQuery = query.lowercase()
-        val filtered = allAccounts.filter { account ->
-            account.name.lowercase().contains(lowercaseQuery) ||
-            account.contactInfo.phone.contains(lowercaseQuery) ||
-            account.address.lowercase().contains(lowercaseQuery) ||
-            account.contactInfo.email?.lowercase()?.contains(lowercaseQuery) == true
-        }
-
-        _filteredAccounts.value = filtered
     }
 
     /**

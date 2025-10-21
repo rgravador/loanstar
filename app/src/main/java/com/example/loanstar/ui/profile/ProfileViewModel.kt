@@ -11,10 +11,21 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Data class for profile statistics
+ */
+data class ProfileStats(
+    val totalAccounts: Int,
+    val activeLoans: Int
+)
+
 class ProfileViewModel : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> = _user
+
+    private val _stats = MutableLiveData<ProfileStats>()
+    val stats: LiveData<ProfileStats> = _stats
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -24,6 +35,7 @@ class ProfileViewModel : ViewModel() {
 
     init {
         loadUserProfile()
+        loadProfileStats()
     }
 
     /**
@@ -53,6 +65,20 @@ class ProfileViewModel : ViewModel() {
 
         _user.value = mockUser
         _isLoading.value = false
+    }
+
+    /**
+     * Load profile statistics
+     * TODO: Replace with actual Supabase API call when backend is implemented
+     */
+    private fun loadProfileStats() {
+        // Mock stats data - replace with actual API call
+        val mockStats = ProfileStats(
+            totalAccounts = 24,
+            activeLoans = 15
+        )
+
+        _stats.value = mockStats
     }
 
     /**
