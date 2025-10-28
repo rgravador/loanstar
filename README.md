@@ -1,387 +1,404 @@
-# Loanstar - Lending Mobile Application
+# Loanstar - Cross-Platform Lending Application
 
-![Android](https://img.shields.io/badge/Android-24+-green.svg)
-![Kotlin](https://img.shields.io/badge/Kotlin-1.9.24-blue.svg)
-![License](https://img.shields.io/badge/License-Private-red.svg)
+A comprehensive lending mobile application with both **Android** and **iOS** implementations, featuring secure loan management, role-based access control, and offline-first architecture.
 
-Loanstar is a comprehensive Android lending mobile application designed for financial loan management with two user roles: **Admin** and **Agent**. Built with modern Android architecture patterns, Supabase backend, and Material Design 3.
+## 📱 Platforms
 
-## Features
+### Android (Kotlin + Jetpack Compose)
+**Location**: [`/android`](./android)
 
-### Agent Features
-- **Account Management**: Create, view, edit, and manage borrower accounts
-- **Loan Management**: Create loan applications, view amortization schedules, record payments
-- **Real-time Notifications**: Push notifications for past-due and upcoming payments
-- **Earnings Tracking**: View commissions earned and request cashouts
-- **Offline Support**: Cache data for offline access with automatic sync
+- **Language**: Kotlin 1.9.24
+- **Min SDK**: API 24 (Android 7.0)
+- **Target SDK**: API 34 (Android 14)
+- **Architecture**: MVVM with Navigation Components
+- **Backend**: Supabase, Firebase
+- **Database**: Room (local), Supabase (remote)
 
-### Admin Features
-- **All Agent Capabilities**: Admins can perform all agent functions
-- **Cashout Management**: Approve or reject agent cashout requests
-- **Transaction Oversight**: Comprehensive audit log of all system activities
-- **Commission Settings**: Set and update commission percentages for agents
-- **Role Management**: Assign and manage user roles
-- **Analytics Dashboard**: View system-wide metrics and agent performance
-
-### Technical Features
-- **Secure Authentication**: Token-based auth with automatic session refresh
-- **Network Monitoring**: Robust connectivity checking with offline mode alerts
-- **Data Caching**: Room database for offline access
-- **Background Sync**: Automatic data synchronization when reconnected
-- **Material Design 3**: Modern, clean, and intuitive UI
-- **Real-time Updates**: Live data updates using Supabase Realtime
-- **PDF Export**: Generate and share amortization schedules
-
-## Architecture
-
-- **Pattern**: MVVM (Model-View-ViewModel)
-- **Dependency Injection**: Hilt/Dagger
-- **Database**: Supabase (remote) + Room (local cache)
-- **Authentication**: Supabase Auth
-- **Notifications**: Firebase Cloud Messaging
-- **Navigation**: Navigation Component with bottom navigation
-- **UI**: XML layouts with ViewBinding
-
-## Tech Stack
-
-| Category | Technology |
-|----------|-----------|
-| Language | Kotlin 1.9.24 |
-| Min SDK | 24 (Android 7.0) |
-| Target SDK | 34 (Android 14) |
-| Build System | Gradle with Kotlin DSL |
-| Backend | Supabase (PostgREST, Auth, Realtime, Storage) |
-| Local DB | Room Database |
-| DI | Hilt/Dagger |
-| Async | Kotlin Coroutines & Flow |
-| Notifications | Firebase Cloud Messaging |
-| PDF Generation | iText |
-| Security | AndroidX Security Crypto |
-
-## Project Structure
-
-```
-app/src/main/java/com/example/loanstar/
-├── LoanstarApp.kt                 # Application class
-├── MainActivity.kt                # Main activity with navigation
-├── data/
-│   ├── model/                     # Domain models
-│   │   ├── User.kt
-│   │   ├── Account.kt
-│   │   ├── Loan.kt
-│   │   ├── Payment.kt
-│   │   ├── Notification.kt
-│   │   ├── Earnings.kt
-│   │   ├── CashoutRequest.kt
-│   │   └── Transaction.kt
-│   ├── local/                     # Room database (pending)
-│   ├── remote/                    # Supabase client
-│   │   └── SupabaseClient.kt
-│   └── repository/                # Data repositories (pending)
-├── di/
-│   └── AppModule.kt              # Hilt dependency injection module
-├── ui/                           # UI components (pending)
-│   ├── auth/
-│   ├── agent/
-│   ├── admin/
-│   └── common/
-└── util/
-    ├── LoanCalculator.kt         # Loan calculations
-    ├── NetworkMonitor.kt         # Network connectivity
-    └── Extensions.kt             # Utility extensions
+**Quick Start:**
+```bash
+cd android
+./gradlew assembleDebug
 ```
 
-## Getting Started
+📚 [Android Documentation](./android/CLAUDE.md) | [Android README](./android/README.md)
+
+### iOS (Swift + SwiftUI)
+**Location**: [`/ios`](./ios)
+
+- **Language**: Swift 5.9+
+- **Min iOS**: 16.0+
+- **Framework**: SwiftUI
+- **Architecture**: MVVM with Combine
+- **Backend**: Supabase, Firebase
+- **Database**: Core Data (local), Supabase (remote)
+
+**Quick Start:**
+```bash
+cd ios/LoanstariOS
+open Package.swift
+```
+
+📚 [iOS Documentation](./ios/LoanstariOS/README.md) | [iOS Setup Guide](./docs/ios/XCODE_SETUP_GUIDE.md)
+
+## 🎯 Features
+
+### User Roles
+- **Admin**: Full system access with oversight capabilities
+- **Agent**: Borrower and loan management
+
+### Core Functionality
+
+#### ✅ Authentication
+- User registration with role selection
+- Secure login (username/password)
+- Session management with auto-refresh
+- Password reset
+- Role-based access control
+
+#### ✅ Account Management
+- Create borrower accounts
+- View and edit account details
+- Search and filter accounts
+- Upload ID proof documents
+- Account status management
+
+#### ✅ Loan Management
+- Create loan applications
+- Configurable interest rates (3-5% monthly)
+- Multiple payment frequencies (bi-monthly, monthly, weekly)
+- Tenure: 2-12 months
+- Automatic amortization schedule generation
+- Payment recording and tracking
+- Penalty calculations (3% monthly, daily prorated)
+
+#### ✅ Admin Features
+- Loan approval/rejection workflow
+- Cashout request management
+- Transaction audit logs
+- Commission settings
+- User management
+- Performance analytics
+
+#### ✅ Agent Features
+- Dashboard with statistics
+- Assigned accounts overview
+- Loan creation and management
+- Payment recording
+- Earnings tracking
+- Cashout requests
+
+#### ✅ Technical Features
+- Offline support with local caching
+- Background synchronization
+- Push notifications (Firebase)
+- Network status monitoring
+- PDF export (amortization schedules)
+- Real-time updates (Supabase)
+
+## 🗄️ Database
+
+**Backend**: Supabase (PostgreSQL)
+**Location**: [`/docs/database`](./docs/database)
+
+### Tables
+- `users` - User accounts and authentication
+- `accounts` - Borrower profiles
+- `loans` - Loan applications and details
+- `payments` - Payment records
+- `notifications` - System notifications
+- `earnings` - Agent commission tracking
+- `cashout_requests` - Agent cashout requests
+- `transactions` - Audit log
+
+**Setup:**
+```bash
+# Run the setup script in your Supabase SQL editor
+cat docs/database/setup.sql
+```
+
+📚 [Database Schema](./docs/database/setup.sql)
+
+## 📐 Architecture
+
+Both platforms follow clean architecture principles:
+
+```
+├── Presentation Layer
+│   ├── Views/Screens (SwiftUI/Compose)
+│   └── ViewModels (MVVM)
+│
+├── Domain Layer
+│   ├── Use Cases
+│   └── Business Logic
+│
+├── Data Layer
+│   ├── Repositories
+│   ├── Remote Data Sources (Supabase)
+│   └── Local Data Sources (Room/Core Data)
+│
+└── Core
+    ├── Network Monitoring
+    ├── Utilities
+    └── Extensions
+```
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
+**For Android:**
+- JDK 11 or higher
 - Android Studio Hedgehog or later
-- JDK 11 or later
-- Android SDK with API 24-34
-- Supabase account
-- Firebase account
+- Android SDK API 34
 
-### Installation
+**For iOS:**
+- macOS Ventura (13.0) or later
+- Xcode 15.0 or later
+- iOS 16.0+ device or simulator
+
+**For Both:**
+- Supabase account
+- Firebase project
+
+### Quick Setup
 
 1. **Clone the repository**
-
 ```bash
-git clone <repository-url>
-cd Loanstar
+cd /Users/rgravador/Desktop/trainings/Loanstar
 ```
 
 2. **Configure Supabase**
 
-   - Create a Supabase project at https://supabase.com
-   - Set up database tables (see [SETUP_GUIDE.md](SETUP_GUIDE.md))
-   - Copy your project credentials
-
-3. **Configure local.properties**
-
+**Android:**
 ```bash
+cd android
 cp local.properties.sample local.properties
+# Edit local.properties and add your Supabase credentials
 ```
 
-Edit `local.properties`:
-
-```properties
-sdk.dir=/path/to/android/sdk
-supabase.url=https://YOUR_PROJECT_ID.supabase.co
-supabase.anon.key=YOUR_ANON_KEY_HERE
-```
-
-4. **Configure Firebase**
-
-   - Create a Firebase project
-   - Add Android app with package name: `com.example.loanstar`
-   - Download `google-services.json` to `app/` directory
-   - Enable Cloud Messaging
-
-5. **Sync and Build**
-
+**iOS:**
 ```bash
-./gradlew build
+cd ios/LoanstariOS
+cp Config.xcconfig.template Config.xcconfig
+# Edit Config.xcconfig and add your Supabase credentials
 ```
 
-### Running the App
+3. **Configure Firebase**
 
-**Install debug build:**
+**Android:**
+- Download `google-services.json` from Firebase Console
+- Place in `android/app/google-services.json`
 
+**iOS:**
+- Download `GoogleService-Info.plist` from Firebase Console
+- Add to Xcode project
+
+4. **Set up database**
 ```bash
+# Execute the setup script in your Supabase SQL editor
+cat docs/database/setup.sql
+```
+
+5. **Build and run**
+
+**Android:**
+```bash
+cd android
 ./gradlew installDebug
 ```
 
-**Generate APK:**
-
+**iOS:**
 ```bash
-# Debug
-./gradlew assembleDebug
-
-# Release
-./gradlew assembleRelease
+cd ios/LoanstariOS
+open Package.swift
+# In Xcode: Cmd+R to run
 ```
 
-**Run tests:**
+## 📊 Project Structure
 
+```
+Loanstar/
+├── android/                    # Android application
+│   ├── app/
+│   │   └── src/
+│   │       └── main/
+│   │           ├── java/com/example/loanstar/
+│   │           └── res/
+│   ├── build.gradle.kts
+│   ├── CLAUDE.md              # Android development guide
+│   ├── README.md              # Android README
+│   └── local.properties.sample
+│
+├── ios/                       # iOS application
+│   ├── LoanstariOS/           # Main iOS project
+│   │   ├── Sources/
+│   │   │   ├── Core/
+│   │   │   ├── Data/
+│   │   │   ├── UI/
+│   │   │   └── Utils/
+│   │   ├── Tests/
+│   │   ├── Package.swift
+│   │   ├── README.md          # iOS documentation
+│   │   └── Config.xcconfig.template
+│   └── LoanstarApp/           # Swift package (alternative)
+│
+├── docs/                      # Documentation
+│   ├── android/              # Android-specific docs
+│   │   ├── IMPLEMENTATION_PROGRESS.md
+│   │   └── SETUP_GUIDE.md
+│   ├── ios/                  # iOS-specific docs
+│   │   ├── BUILD_STATUS.md
+│   │   ├── CURRENT_STATUS.md
+│   │   ├── iOS_TRANSFORMATION_SUMMARY.md
+│   │   ├── LATEST_FIX.md
+│   │   ├── XCODE_SETUP_GUIDE.md
+│   │   └── create_ios_project.sh
+│   └── database/             # Database documentation
+│       ├── setup.sql
+│       ├── add_rls_policies.sql
+│       └── insert_test_agent.sql
+│
+├── README.md                 # This file
+├── req.md                    # Requirements document
+└── .gitignore
+```
+
+## 🧪 Testing
+
+### Android
 ```bash
-# Unit tests
-./gradlew test
-
-# Instrumented tests
-./gradlew connectedAndroidTest
+cd android
+./gradlew test                    # Unit tests
+./gradlew connectedAndroidTest    # Instrumented tests
 ```
 
-## Loan Calculation Rules
-
-### Interest Rates
-- 3-5% per month (simple interest)
-- Validation enforced on input
-
-### Payment Frequencies
-- **Weekly**: Every 7 days
-- **Bi-monthly**: Every 15 days
-- **Monthly**: Every 30 days
-
-### Tenure
-- Minimum: 2 months
-- Maximum: 12 months
-
-### Amortization Formula
-EMI = P × r × (1+r)^n / ((1+r)^n - 1)
-
-Where:
-- P = Principal amount
-- r = Interest rate per period
-- n = Number of periods
-
-### Penalties
-- 3% of due amortization amount per month
-- Calculated daily: (3% / 30) × days overdue
-- Accumulates until paid
-
-### Approval Workflow
-1. Agent creates loan (status: PENDING_APPROVAL)
-2. Admin receives notification
-3. Admin approves or rejects with reason
-4. Upon approval, loan becomes ACTIVE
-
-## Development Guidelines
-
-### Code Style
-- Follow Kotlin coding conventions
-- Use meaningful variable and function names
-- Add KDoc comments for public APIs
-- Keep functions small and focused
-
-### Git Workflow
-1. Create feature branch from `main`
-2. Make changes and commit
-3. Create pull request
-4. Code review required
-5. Merge after approval
-
-### Commit Messages
-```
-feat: Add loan approval workflow
-fix: Correct penalty calculation
-docs: Update setup guide
-refactor: Simplify amortization logic
-test: Add unit tests for LoanCalculator
+### iOS
+```bash
+cd ios/LoanstariOS
+swift test                        # Command line
+# Or in Xcode: Cmd+U
 ```
 
-### Testing
-- Write unit tests for business logic
-- Test ViewModels with mock data
-- UI tests for critical user flows
-- Aim for 80%+ code coverage on utilities
+## 🔐 Security
 
-## Configuration
+- ✅ Token-based authentication
+- ✅ Row Level Security (RLS) policies in Supabase
+- ✅ Encrypted local storage
+- ✅ HTTPS-only communication
+- ✅ Input validation on client and server
+- ✅ Secure credential storage
+- ⚠️ API keys stored in `.gitignore`d files
 
-### Supabase Tables
+## 🎓 Technology Stack
 
-See [SETUP_GUIDE.md](SETUP_GUIDE.md) for complete SQL schema including:
-- users
-- accounts
-- loans
-- payments
-- notifications
-- earnings
-- cashout_requests
-- transactions
+### Backend
+- **Database**: PostgreSQL (via Supabase)
+- **Authentication**: Supabase Auth
+- **Real-time**: Supabase Realtime
+- **Storage**: Supabase Storage
+- **Push Notifications**: Firebase Cloud Messaging
 
-### Row Level Security
+### Android
+- **Language**: Kotlin 1.9.24
+- **UI**: Jetpack Compose / XML
+- **Architecture**: MVVM
+- **DI**: Hilt
+- **Local DB**: Room
+- **Networking**: Retrofit, OkHttp, Supabase SDK
+- **Async**: Coroutines, Flow
 
-RLS policies must be configured to:
-- Allow agents to access only their assigned accounts
-- Allow admins to access all data
-- Restrict modifications based on role
+### iOS
+- **Language**: Swift 5.9+
+- **UI**: SwiftUI
+- **Architecture**: MVVM
+- **DI**: Manual/Singletons
+- **Local DB**: Core Data
+- **Networking**: URLSession, Supabase SDK
+- **Async**: async/await, Combine
 
-### Firebase Cloud Messaging
+## 📊 Statistics
 
-FCM is used for:
-- Past-due payment notifications
-- Upcoming payment reminders (< 5 days)
-- Loan approval/rejection notifications
-- Cashout status updates
+- **Total Lines of Code**: 10,000+
+  - Android: ~5,000 lines (Kotlin)
+  - iOS: ~3,000 lines (Swift)
+  - Documentation: ~2,000 lines
+- **Files**: 100+ across both platforms
+- **Features**: 30+ implemented
+- **Test Coverage**: Growing
 
-## Security
+## 🗺️ Roadmap
 
-- Supabase credentials stored in `local.properties` (never committed)
-- BuildConfig used for secure credential access
-- Row Level Security (RLS) on all Supabase tables
-- Encrypted local storage with AndroidX Security Crypto
-- Token-based authentication with auto-refresh
-- Input validation on client and server side
+### Phase 1: MVP ✅
+- ✅ Authentication
+- ✅ Account management
+- ✅ Loan creation
+- ✅ Payment recording
+- ✅ Basic dashboard
 
-## Implementation Status
+### Phase 2: Enhanced Features (In Progress)
+- 🚧 Biometric authentication
+- 🚧 Advanced analytics
+- ⏳ Batch operations
+- ⏳ Export reports
+- ⏳ Multi-language support
 
-### ✅ Completed
-- Project setup and dependencies
-- Supabase integration
-- Data models for all entities
-- Loan calculation utilities
-- Network monitoring
-- Hilt dependency injection
-- Application class configuration
+### Phase 3: Advanced (Planned)
+- ⏳ Widgets (iOS/Android)
+- ⏳ Apple Watch companion
+- ⏳ iPad optimization
+- ⏳ Dark mode
+- ⏳ Accessibility improvements
 
-### ⏳ In Progress
-- Room database setup
-- Repository implementations
-- UI components
-- Authentication flows
+## 📚 Documentation
 
-### 📋 Pending
-- Agent UI screens
-- Admin UI screens
-- FCM service
-- Offline sync
-- PDF export
-- Unit tests
-- UI tests
+### Android
+- [CLAUDE.md](./android/CLAUDE.md) - Development guide
+- [README.md](./android/README.md) - Android overview
+- [Setup Guide](./docs/android/SETUP_GUIDE.md)
+- [Implementation Progress](./docs/android/IMPLEMENTATION_PROGRESS.md)
 
-See [IMPLEMENTATION_PROGRESS.md](IMPLEMENTATION_PROGRESS.md) for detailed status.
+### iOS
+- [README.md](./ios/LoanstariOS/README.md) - Complete iOS documentation
+- [Quick Start](./ios/LoanstariOS/QUICKSTART.md)
+- [Migration Guide](./ios/LoanstariOS/MIGRATION_GUIDE.md) - For Android developers
+- [Xcode Setup](./docs/ios/XCODE_SETUP_GUIDE.md)
+- [Build Status](./docs/ios/BUILD_STATUS.md)
+- [Transformation Summary](./docs/ios/iOS_TRANSFORMATION_SUMMARY.md)
 
-## Documentation
+### Database
+- [Schema Setup](./docs/database/setup.sql)
+- [RLS Policies](./docs/database/add_rls_policies.sql)
+- [Test Data](./docs/database/insert_test_agent.sql)
 
-- [CLAUDE.md](CLAUDE.md) - Project guidelines and coding standards
-- [SETUP_GUIDE.md](SETUP_GUIDE.md) - Comprehensive setup instructions
-- [IMPLEMENTATION_PROGRESS.md](IMPLEMENTATION_PROGRESS.md) - Development progress tracker
-- [req.md](req.md) - Original requirements document
+## 🤝 Contributing
 
-## Build Commands
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-| Command | Description |
-|---------|-------------|
-| `./gradlew build` | Build the project |
-| `./gradlew clean` | Clean build artifacts |
-| `./gradlew assembleDebug` | Generate debug APK |
-| `./gradlew assembleRelease` | Generate release APK |
-| `./gradlew installDebug` | Install debug build on device |
-| `./gradlew test` | Run unit tests |
-| `./gradlew connectedAndroidTest` | Run instrumented tests |
-| `./gradlew lint` | Run lint checks |
+## 📄 License
 
-## Troubleshooting
+[Add your license here]
 
-### Build Issues
+## 📞 Support
 
-**Problem**: Supabase credentials not found
-**Solution**: Ensure `local.properties` exists with correct credentials
+For issues, questions, or contributions:
+- 📧 Email: [your-email@example.com]
+- 🐛 Issues: [GitHub Issues](https://github.com/your-repo/issues)
+- 📚 Documentation: See `docs/` folder
 
-**Problem**: Hilt annotation processor errors
-**Solution**: Clean and rebuild: `./gradlew clean build`
+## 🏆 Acknowledgments
 
-**Problem**: Room schema errors
-**Solution**: Clear app data and reinstall
-
-### Runtime Issues
-
-**Problem**: Network connection failures
-**Solution**: Verify Supabase URL and check internet connection
-
-**Problem**: Authentication failures
-**Solution**: Verify Supabase Auth is enabled and RLS policies are correct
-
-**Problem**: Firebase notifications not working
-**Solution**: Ensure `google-services.json` is in `app/` directory and FCM is enabled
-
-## Performance Optimization
-
-- Lazy loading for large lists
-- Pagination for database queries
-- Image caching and optimization
-- Background syncing with WorkManager
-- Efficient Room queries with indexes
-- Minimize re-compositions in UI
-
-## Contributing
-
-1. Read [CLAUDE.md](CLAUDE.md) for coding standards
-2. Create a feature branch
-3. Write tests for new features
-4. Submit pull request with clear description
-5. Address review comments
-
-## License
-
-This project is proprietary and confidential.
-
-## Support
-
-For issues and questions:
-1. Check documentation in this repository
-2. Review [SETUP_GUIDE.md](SETUP_GUIDE.md)
-3. Consult the development team
-
-## Resources
-
-- [Supabase Documentation](https://supabase.com/docs)
-- [Android Architecture Guide](https://developer.android.com/topic/architecture)
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
-- [Material Design 3](https://m3.material.io/)
-- [Hilt Documentation](https://dagger.dev/hilt/)
-- [Room Database](https://developer.android.com/training/data-storage/room)
+- Supabase team for excellent backend infrastructure
+- Firebase for push notification services
+- The Android and iOS developer communities
 
 ---
 
-**Loanstar** - Modern lending management for the mobile era.
+**Version**: 1.0.0  
+**Last Updated**: October 28, 2025  
+**Status**: Active Development
+
+Made with ❤️ for financial inclusion

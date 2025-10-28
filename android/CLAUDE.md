@@ -337,9 +337,9 @@ Design tables for:
 
 ### Database Schema Management
 
-**CRITICAL: Always check and update `setup.sql` when working with database-related code.**
+**CRITICAL: Always check and update `../docs/database/setup.sql` when working with database-related code.**
 
-The `setup.sql` file in the project root is the single source of truth for the database schema. Follow these rules strictly:
+The `setup.sql` file in the docs/database folder is the single source of truth for the database schema. Follow these rules strictly:
 
 1. **Before Creating/Updating Database Code**:
    - ALWAYS read `setup.sql` first to understand the current schema
