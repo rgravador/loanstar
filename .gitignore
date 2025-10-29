@@ -13,3 +13,28 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+
+# Nuxt dev/build outputs
+web/.output
+web/.nuxt
+web/.nitro
+web/.cache
+web/dist
+
+# Node dependencies
+web/node_modules
+
+# Logs
+web/logs
+web/*.log
+
+# Misc
+web/.DS_Store
+web/.fleet
+web/.idea
+
+# Local env files
+web/.env
+web/.env.*
+web/!.env.example
